@@ -10,6 +10,7 @@
       height: 100%;
       overflow: hidden;
       background: black;
+      cursor: pointer; /* подсказка, что можно кликнуть */
     }
     #bg {
       position: fixed;
@@ -19,35 +20,41 @@
       object-fit: cover;
       z-index: -1;
     }
-    #startBtn {
+    #hint {
       position: absolute;
       top: 50%; left: 50%;
       transform: translate(-50%, -50%);
-      padding: 1em 2em;
-      background: rgba(0,0,0,0.6);
       color: #fff;
-      border: none;
-      font-size: 1.2em;
-      cursor: pointer;
+      font-size: 1.5em;
+      background: rgba(0,0,0,0.4);
+      padding: 0.5em 1em;
+      border-radius: 10px;
     }
   </style>
 </head>
 <body>
 
-  <!-- Гифка -->
-  <img id="bg" src="jokegif.gif" alt="АЛЛАХ">
+  <!-- Гифка на весь экран -->
+  <img id="bg" src="jokegif.gif" alt="Фон">
 
   <!-- Музыка -->
   <audio id="music" src="music.mp3" loop></audio>
 
-  <script>
-    const btn = document.getElementById('startBtn');
-    const audio = document.getElementById('music');
+  <div id="hint">Нажмите, чтобы включить звук 🎵</div>
 
-    btn.addEventListener('click', async () => {
-      await audio.play();
-      btn.style.display = 'none';
-    });
+  <script>
+    const audio = document.getElementById('music');
+    const hint  = document.getElementById('hint');
+
+    // Первый клик в любом месте включает музыку
+    document.addEventListener('click', async () => {
+      try {
+        await audio.play();
+        hint.style.display = 'none';
+      } catch (err) {
+        console.log('Не удалось запустить аудио:', err);
+      }
+    }, { once: true });
   </script>
 </body>
 </html>
