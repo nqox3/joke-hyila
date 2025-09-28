@@ -12,6 +12,7 @@
             height: 100vh;
             overflow: hidden;
             background: #000;
+            cursor: pointer;
         }
         img {
             width: 100%;
@@ -21,27 +22,74 @@
             top: 0;
             left: 0;
             z-index: 1;
+            animation: scatter 5s infinite alternate;
         }
         audio {
             display: none;
+        }
+        @keyframes scatter {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+            25% {
+                transform: translate(-10vw, 10vh) scale(1.2);
+            }
+            50% {
+                transform: translate(15vw, -15vh) scale(0.8);
+            }
+            75% {
+                transform: translate(-5vw, 5vh) scale(1.1);
+            }
+            100% {
+                transform: translate(10vw, -10vh) scale(0.9);
+            }
+        }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            font-size: 24px;
+            text-align: center;
         }
     </style>
 </head>
 <body>
     <img src="https://i.gifer.com/9hgC.gif" alt="Epic Gif">
     <audio id="audio" src="music.mp3" loop></audio>
+    <div class="overlay" id="overlay">Кликни, чтобы запустить пиздец!</div>
 
     <script>
         const audio = document.getElementById('audio');
+        const overlay = document.getElementById('overlay');
+
         function playAudio() {
-            audio.play().catch(e => console.log('Браузер ебёт автоплей, кликни экран:', e));
+            audio.play().catch(e => console.log('Браузер блочит звук, кликни еще:', e));
         }
-        // Запуск по клику (браузеры блочат автоплей)
-        document.addEventListener('click', playAudio, { once: true });
-        // Пробуем автоплей сразу
-        window.onload = () => {
+
+        function openTabs() {
+            const url = window.location.href;
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    window.open(url, '_blank');
+                }, i * 1000); // Задержка 1 сек между вкладками
+            }
+        }
+
+        // Запуск по клику
+        overlay.addEventListener('click', () => {
             playAudio();
-        };
+            openTabs();
+            overlay.style.display = 'none'; // Убираем оверлей
+        });
     </script>
 </body>
 </html>
